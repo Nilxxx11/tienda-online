@@ -62,7 +62,7 @@ a{ color: inherit; text-decoration:none; }
 .marquee-track{
   display: inline-flex;
   gap: 40px;
-  animation: marquee-scroll 60s linear infinite;
+  animation: marquee-scroll 40s linear infinite;
   font-family: var(--display);
   font-size: 0.78rem;
   letter-spacing: 0.04em;

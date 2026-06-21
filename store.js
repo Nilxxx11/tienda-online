@@ -24,6 +24,20 @@ document.getElementById('footerName').textContent = storeConfig.nombre || 'ATELI
 document.getElementById('whatsappFloat').href = `https://wa.me/${storeConfig.whatsappNumero}`;
 document.title = (storeConfig.nombre || 'ATELIER') + ' — Tienda';
 
+/* Marquee: velocidad constante independiente del viewport */
+(function fixMarqueeSpeed(){
+  const track = document.querySelector('.marquee-track');
+  if (!track) return;
+  const speed = 80; // pixeles por segundo
+  function update(){
+    const w = track.scrollWidth / 2;
+    const dur = w / speed;
+    track.style.animationDuration = dur + 's';
+  }
+  update();
+  window.addEventListener('resize', update);
+})();
+
 function formatPrice(n){
   const num = Number(n) || 0;
   return storeConfig.simboloMoneda + num.toLocaleString('es-CO');
