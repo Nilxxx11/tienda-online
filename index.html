@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATELIER — Tienda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ MARQUEE TICKER ============ -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>✦ ENVÍOS A TODO EL PAÍS</span>
+    <span>✦ NUEVA COLECCIÓN YA DISPONIBLE</span>
+    <span>✦ PAGA Y COORDINA POR WHATSAPP</span>
+    <span>✦ ENVÍOS A TODO EL PAÍS</span>
+    <span>✦ NUEVA COLECCIÓN YA DISPONIBLE</span>
+    <span>✦ PAGA Y COORDINA POR WHATSAPP</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header">
+  <div class="header-inner">
+    <button class="menu-trigger" id="menuTrigger" aria-label="Abrir categorías">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="#" class="logo" id="logoText">ATELIER</a>
+    <button class="cart-trigger" id="cartTrigger" aria-label="Abrir carrito">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">★ Colección actual ★</p>
+    <h1 class="hero-title">
+      <span class="line line-1">PIEZAS QUE</span>
+      <span class="line line-2">SE NOTAN</span>
+    </h1>
+    <p class="hero-sub">Agrega lo que te guste al carrito y confirma tu pedido directo por WhatsApp. Fácil, rápido, sin vueltas.</p>
+    <div class="hero-scroll-hint">
+      <span>Mira la colección</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATEGORÍAS (lateral deslizable) ============ -->
+<div class="category-panel" id="categoryPanel">
+  <div class="category-panel-head">
+    <span>Categorías</span>
+    <button id="closeCategoryPanel" aria-label="Cerrar">&times;</button>
+  </div>
+  <nav class="category-list" id="categoryList">
+    <button class="category-item active" data-cat="all">Todo</button>
+  </nav>
+</div>
+<div class="overlay" id="categoryOverlay"></div>
+
+<!-- ============ CATÁLOGO ============ -->
+<main class="catalog-section">
+  <div class="catalog-head">
+    <h2 class="section-title">Catálogo</h2>
+    <span class="catalog-count" id="catalogCount"></span>
+  </div>
+
+  <div class="catalog-grid" id="catalogGrid">
+    <!-- Las tarjetas de producto se insertan por JS -->
+  </div>
+
+  <div class="empty-state" id="emptyState" hidden>
+    <p>Aún no hay productos publicados.</p>
+    <p class="empty-sub">Vuelve pronto — estamos preparando la colección.</p>
+  </div>
+
+  <div class="loading-state" id="loadingState">
+    <div class="spinner"></div>
+    <p>Cargando colección…</p>
+  </div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <p class="footer-big">¿Te gustó algo?</p>
+  <p class="footer-cta">Escríbenos directo, sin rodeos.</p>
+  <p class="footer-copy">&copy; <span id="year"></span> <span class="footer-name" id="footerName">ATELIER</span></p>
+</footer>
+
+<!-- ============ MODAL DETALLE PRODUCTO ============ -->
+<div class="product-modal" id="productModal">
+  <div class="product-modal-card">
+    <button class="modal-close" id="modalClose" aria-label="Cerrar">&times;</button>
+    <div class="modal-img-wrap">
+      <img id="modalImg" src="" alt="">
+    </div>
+    <div class="modal-info">
+      <p class="modal-ref" id="modalRef"></p>
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <p class="modal-price" id="modalPrice"></p>
+      <p class="modal-desc" id="modalDesc"></p>
+
+      <div class="modal-options">
+        <div class="option-group" id="modalSizeGroup" hidden>
+          <label>Talla</label>
+          <div class="option-pills" id="modalSizePills"></div>
+        </div>
+        <div class="option-group" id="modalColorGroup" hidden>
+          <label>Color</label>
+          <div class="option-pills" id="modalColorPills"></div>
+        </div>
+      </div>
+
+      <div class="qty-row">
+        <label>Cantidad</label>
+        <div class="qty-control">
+          <button id="qtyMinus" aria-label="Restar">&minus;</button>
+          <span id="qtyValue">1</span>
+          <button id="qtyPlus" aria-label="Sumar">+</button>
+        </div>
+      </div>
+
+      <button class="btn-add-cart" id="modalAddBtn">Agregar al carrito</button>
+      <p class="stock-note" id="stockNote"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CARRITO LATERAL (estilo recibo) ============ -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head">
+    <h3>Tu pedido</h3>
+    <button id="closeCart" aria-label="Cerrar carrito">&times;</button>
+  </div>
+
+  <div class="cart-items" id="cartItems">
+    <p class="cart-empty-msg" id="cartEmptyMsg">Tu carrito está vacío.<br>Explora la colección y agrega tus piezas favoritas.</p>
+  </div>
+
+  <div class="cart-footer" id="cartFooter" hidden>
+    <div class="receipt-line"></div>
+    <div class="cart-total-row">
+      <span>Total</span>
+      <span id="cartTotal">$0</span>
+    </div>
+    <textarea id="cartNote" placeholder="Nota para tu pedido (opcional): dirección, horario, etc." rows="2"></textarea>
+    <button class="btn-whatsapp" id="checkoutBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm5.78 14.13c-.24.68-1.4 1.3-1.93 1.38-.49.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1-2.4.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.14.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.18 1.53 1.91 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.69-.81.87-1.09.18-.28.36-.23.6-.14.24.09 1.55.74 1.81.87.26.13.44.19.5.3.07.11.07.61-.17 1.29z"/></svg>
+      <span>Confirmar por WhatsApp</span>
+    </button>
+  </div>
+</div>
+<div class="overlay" id="cartOverlay"></div>
+
+<!-- ============ WHATSAPP FLOTANTE ============ -->
+<a class="whatsapp-float" id="whatsappFloat" href="#" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm5.78 14.13c-.24.68-1.4 1.3-1.93 1.38-.49.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1-2.4.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.14.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.18 1.53 1.91 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.69-.81.87-1.09.18-.28.36-.23.6-.14.24.09 1.55.74 1.81.87.26.13.44.19.5.3.07.11.07.61-.17 1.29z"/></svg>
+</a>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK (compat, sencillo de usar sin build tools) -->
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
+
+<script src="config.js"></script>
+<script src="store.js"></script>
+</body>
+</html>

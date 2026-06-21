@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de administración — ATELIER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <h1>Panel admin</h1>
+    <p class="login-sub">Inicia sesión para gestionar el catálogo</p>
+    <form id="loginForm">
+      <label>Correo</label>
+      <input type="email" id="loginEmail" required autocomplete="username">
+      <label>Contraseña</label>
+      <input type="password" id="loginPassword" required autocomplete="current-password">
+      <button type="submit" class="btn-primary">Entrar</button>
+      <p class="login-error" id="loginError"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ============ PANEL (visible tras login) ============ -->
+<div class="admin-app" id="adminApp" hidden>
+
+  <header class="admin-header">
+    <h1>Catálogo</h1>
+    <div class="admin-header-right">
+      <span id="userEmail"></span>
+      <button class="btn-ghost" id="logoutBtn">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="admin-toolbar">
+      <button class="btn-primary" id="newProductBtn">+ Nuevo producto</button>
+      <span class="product-total" id="productTotal"></span>
+    </div>
+
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Visible</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="productTableBody"></tbody>
+      </table>
+      <p class="admin-empty" id="adminEmpty" hidden>No hay productos todavía. Crea el primero.</p>
+    </div>
+  </main>
+</div>
+
+<!-- ============ MODAL: CREAR / EDITAR PRODUCTO ============ -->
+<div class="product-form-modal" id="formModal">
+  <div class="product-form-card">
+    <div class="form-head">
+      <h2 id="formTitle">Nuevo producto</h2>
+      <button id="formClose" aria-label="Cerrar">&times;</button>
+    </div>
+
+    <form id="productForm">
+      <div class="form-grid">
+        <div class="field">
+          <label>Nombre del producto *</label>
+          <input type="text" id="fNombre" required>
+        </div>
+
+        <div class="field">
+          <label>Categoría</label>
+          <select id="fCategoria">
+            <option value="">Sin categoría</option>
+          </select>
+          <div class="new-category-row" id="newCategoryRow" hidden>
+            <input type="text" id="fNewCategory" placeholder="Nombre de la nueva categoría">
+            <button type="button" class="btn-ghost" id="addCategoryBtn">Agregar</button>
+            <button type="button" class="btn-ghost" id="cancelCategoryBtn">Cancelar</button>
+          </div>
+          <button type="button" class="btn-ghost btn-add-cat" id="showNewCategoryBtn">+ Nueva categoría</button>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Precio *</label>
+            <input type="number" id="fPrecio" min="0" required>
+          </div>
+          <div class="field">
+            <label>Precio anterior (oferta)</label>
+            <input type="number" id="fPrecioAnterior" min="0">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Descripción</label>
+          <textarea id="fDescripcion" rows="3"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Tallas y stock (opcional) — formato: S:5, M:8, L:3</label>
+          <input type="text" id="fTallas" placeholder="S:5, M:8, L:3">
+        </div>
+
+        <div class="field">
+          <label>Colores (opcional, separados por coma)</label>
+          <input type="text" id="fColores" placeholder="Negro, Blanco, Beige">
+        </div>
+
+        <div class="field">
+          <label>Stock general (si no usas tallas)</label>
+          <input type="number" id="fStock" min="0">
+        </div>
+
+        <div class="field checkbox-field">
+          <label><input type="checkbox" id="fDestacado"> Marcar como nuevo / destacado</label>
+        </div>
+        <div class="field checkbox-field">
+          <label><input type="checkbox" id="fActivo" checked> Visible en la tienda</label>
+        </div>
+
+        <div class="field">
+          <label>Imagen del producto *</label>
+          <div class="image-upload-zone" id="dropZone">
+            <input type="file" id="fImagenFile" accept="image/*" hidden>
+            <div id="uploadPrompt">
+              <p>Arrastra una imagen aquí o</p>
+              <button type="button" class="btn-ghost" id="browseBtn">Seleccionar archivo</button>
+            </div>
+            <img id="imagePreview" hidden>
+            <div class="upload-progress" id="uploadProgress" hidden>
+              <div class="spinner-small"></div>
+              <span>Subiendo imagen…</span>
+            </div>
+          </div>
+          <input type="hidden" id="fImagenUrl">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-ghost" id="cancelFormBtn">Cancelar</button>
+        <button type="submit" class="btn-primary" id="saveProductBtn">Guardar producto</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
+
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
